@@ -116,6 +116,27 @@
 }
 
 
+.table {
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid #ddd;
+
+  tr {
+    td {
+      border-bottom: 1px solid #ddd;
+      padding: 0;
+      padding-left: 10px;
+
+      &:first-child {
+        border-right: 1px solid #ddd;
+      }
+    }
+
+    height: 28px;
+  }
+  
+}
+
 
 
 /* line 5, /Users/dev/code/modao/imock/app/assets/stylesheets/application/post/content.sass */

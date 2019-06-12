@@ -39,6 +39,14 @@ export default class ToolBar extends Component {
   }
 
   getToken = async () => {
+    let token = 1;
+    this.setState({
+      token: token
+    })
+    localStorage.setItem('token', token)
+
+    return
+
     this.changeLoading(true)
     try {
       const res = await axios.get(`/api/v2/qiniu/uptoken?bucket=${this.state.selectBucket}`)
@@ -50,10 +58,12 @@ export default class ToolBar extends Component {
       localStorage.setItem('token', res.data.token)
       this.changeLoading(false)
     } catch (error) {
+      console.log(error)
+
       if (error.status == 403) {
         alert('请到 modao.cc 进行登录');
       }else {
-        alert('获取上传 token 错误');
+        alert('获取上传 token 错误，请到 modao.cc 进行登录');
       }
     }
   } 
@@ -83,10 +93,9 @@ export default class ToolBar extends Component {
           )
         }
 
-        {(showHelp || showSelectBucket || showUpload) && (
+        {(showSelectBucket || showUpload) && (
           <div className='mask'>
             <div className='modal'>
-              {showHelp && <Help onClose={() => this.setState({showHelp: false})} />}
               {showSelectBucket && <SelectBucket onChange={this.setUploadInfo}/>}
               {showUpload && <UploadPicture
                              selectBucket={selectBucket}
@@ -94,6 +103,14 @@ export default class ToolBar extends Component {
                              token={token}
                              changeLoading={(value) => {this.changeLoading(value)}}
                              onClose={() => this.setState({showUpload: false})} />}
+            </div>
+          </div>
+        )}
+
+        {showHelp && (
+          <div className='mask'>
+            <div className='modal' style={{width: '800px', height: 'calc(100% - 200px)', overflow: 'auto'}}>
+              {showHelp && <Help onClose={() => this.setState({showHelp: false})} />}
             </div>
           </div>
         )}
