@@ -39,14 +39,6 @@ export default class ToolBar extends Component {
   }
 
   getToken = async () => {
-    let token = 1;
-    this.setState({
-      token: token
-    })
-    localStorage.setItem('token', token)
-
-    return
-
     this.changeLoading(true)
     try {
       const res = await axios.get(`/api/v2/qiniu/uptoken?bucket=${this.state.selectBucket}`)
