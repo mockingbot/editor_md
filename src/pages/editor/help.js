@@ -9,6 +9,7 @@ export default class Help extends Component {
       <div className="help">
         <table className='table' cellSpacing="0">
           <tbody>
+            <tr><td>关键词</td><td>[keywords]: 关键词1,关键词2,关键词3#<br/>英文逗号，以#结尾</td></tr>
             <tr><td>h1 - h6</td><td>1-6 个#  示例： #  ##</td></tr>
             <tr><td>加粗</td><td>**内容**</td></tr>
             <tr><td>斜体</td><td>*内容*</td></tr>

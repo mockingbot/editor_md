@@ -90,6 +90,12 @@
   }
 }
 
+.keywords {
+  position: absolute;
+  right:  15px;
+  line-height: 40px;
+  color: #eb5648;
+}
 
 .toolbar, .help, .selectBucket, .uoload {
   button {
