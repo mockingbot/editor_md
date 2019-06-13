@@ -61,20 +61,20 @@ export default class UploadPicture extends Component {
       alert('上传出错了');
       this.props.changeLoading(false);
     }
-    
+
     if (res) {
       let img = new Image();
       img.src = `${res.data.domain}/${res.data.key}`;
       img.onload = () => {
         const alt = img.naturalWidth + '*' +  img.naturalHeight
         this.setState({
-          imageUrl: `![${alt}](${img.src})`
+          imageUrl: `<center>\n\n![${alt}](${img.src})\n\n</center>`
         })
         this.props.changeLoading(false);
       }
     }
 
-    
+
   }
 
   render() {
