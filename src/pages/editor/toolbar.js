@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import SelectBucket from './selectBucket'
 import Help from './help'
 import UploadPicture from './uploadPicture'
+import UploadVideo from './uploadVideo'
 import axios, { post } from 'axios';
 
 export default class ToolBar extends Component {
@@ -14,7 +15,8 @@ export default class ToolBar extends Component {
     uploadurl: localStorage.getItem('uploadurl'),
     selectBucket: localStorage.getItem('selectBucket'),
     token: localStorage.getItem('token'),
-    loading: false
+    loading: false,
+    showUploadVideo: false
   }
 
   componentDidMount() {
@@ -26,9 +28,9 @@ export default class ToolBar extends Component {
   setUploadInfo = (uploadurl, selectBucket)=> {
     localStorage.setItem('uploadurl', uploadurl)
     localStorage.setItem('selectBucket', selectBucket)
-    
+
     this.setState({
-      uploadurl, 
+      uploadurl,
       selectBucket,
       showSelectBucket: false,
     })
@@ -39,6 +41,11 @@ export default class ToolBar extends Component {
   }
 
   getToken = async () => {
+    // let token = "p_Hevt947EGziYEtYlub2bkHu4hCVY0g_uZvmJ1b:RLCHEBiwYWvi7D97VYLyY7zEf7I=:eyJzY29wZSI6Im1iY24tc3RhdGljIiwicmV0dXJuQm9keSI6IntcImtleVwiOiAkKGtleSksIFwiaGFzaFwiOiAkKGV0YWcpLCBcImRvbWFpblwiOiBcImh0dHBzOi8vY2RuLm1vZGFvLmNjXCJ9IiwiZGVhZGxpbmUiOjE1NjA0NDU3NDQsInVwaG9zdHMiOlsiaHR0cDovL3VwLXoxLnFpbml1LmNvbSIsImh0dHA6Ly91cGxvYWQtejEucWluaXUuY29tIiwiLUggdXAtejEucWluaXUuY29tIGh0dHA6Ly8xMDYuMzguMjI3LjI4Il0sImdsb2JhbCI6ZmFsc2V9"
+    // this.setState({
+    //   token: token
+    // })
+    // localStorage.setItem('token', token)
     this.changeLoading(true)
     try {
       const res = await axios.get(`/api/v2/qiniu/uptoken?bucket=${this.state.selectBucket}`)
@@ -58,7 +65,7 @@ export default class ToolBar extends Component {
         alert('获取上传 token 错误，请到 modao.cc 进行登录');
       }
     }
-  } 
+  }
 
   changeLoading = value => {
     this.setState({
@@ -67,11 +74,12 @@ export default class ToolBar extends Component {
   }
 
   render() {
-    const { showHelp, showUpload, showSelectBucket, selectBucket, uploadurl, token, loading } = this.state
+    const { showHelp, showUpload, showSelectBucket, selectBucket, uploadurl, token, loading, showUploadVideo } = this.state
 
     return (
       <div className='toolbar'>
         <button className='default' onClick={() => this.setState({showUpload: true})} >上传图片</button>
+        <button className='default' onClick={() => this.setState({showUploadVideo: true})} >上传视频</button>
         <button className={selectBucket === process.env.REACT_APP_EN_BUCKET ? 'danger' : 'default'} onClick={()=>this.setState({showSelectBucket: true})}>
           {selectBucket === process.env.REACT_APP_EN_BUCKET ? '国际站' : '国内站'}
         </button>
@@ -85,7 +93,7 @@ export default class ToolBar extends Component {
           )
         }
 
-        {(showSelectBucket || showUpload) && (
+        {(showSelectBucket || showUpload || showUploadVideo) && (
           <div className='mask'>
             <div className='modal'>
               {showSelectBucket && <SelectBucket onChange={this.setUploadInfo}/>}
@@ -95,6 +103,12 @@ export default class ToolBar extends Component {
                              token={token}
                              changeLoading={(value) => {this.changeLoading(value)}}
                              onClose={() => this.setState({showUpload: false})} />}
+              {showUploadVideo && <UploadVideo
+                             selectBucket={selectBucket}
+                             uploadurl={uploadurl}
+                             token={token}
+                             changeLoading={(value) => {this.changeLoading(value)}}
+                             onClose={() => this.setState({showUploadVideo: false})} />}
             </div>
           </div>
         )}
