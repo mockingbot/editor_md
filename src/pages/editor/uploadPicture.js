@@ -30,22 +30,36 @@ export default class UploadPicture extends Component {
         }
     }
 
-    if (file) {
-      this.upload({
-        target: {
-          files: [file]
-        }
-      })
-    }
+    setTimeout(() => {
+      if (file) {
+        this.upload({
+          target: {
+            files: [file],
+            name: document.querySelector('#textarea').value
+          }
+        })
+      }
+    })
+
+
   }
 
   upload = async (e) => {
     const {selectBucket, uploadurl} = this.props
 
+    if (!e.target || !e.target.files[0]) {
+      return false
+    }
+
+    let filename = e.target.files[0].name;
+    if (e.target.name) {
+      filename = e.target.name
+    }
+
     const formData = new FormData();
     formData.append('file', e.target.files[0])
     formData.append('token', this.props.token)
-    formData.append('key', `md/${moment(new Date()).format("YYYYMMDD")}/${this.guid().substr(0, 10)}_${e.target.files[0].name}`)
+    formData.append('key', `md/${moment(new Date()).format("YYYYMMDD")}/${this.guid().substr(0, 10)}_${filename}`)
 
     const config = {
       headers: {
@@ -83,7 +97,7 @@ export default class UploadPicture extends Component {
     return (
       <div className="uoload">
         <h3>ctrl + v 上传或点击上传</h3>
-        <textarea placeholder="在此处 ctrl + v" rows="3" cols="80" onPaste={this.paste}></textarea><br/><br/>
+        <textarea placeholder="在此处 ctrl + v" rows="3" cols="80" id="textarea" onPaste={this.paste}></textarea><br/><br/>
         <input type='file' onChange={this.upload}></input>
 
         {imageUrl && (
